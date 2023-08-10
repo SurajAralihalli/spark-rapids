@@ -146,67 +146,53 @@ We can input multiple Spark event logs and this tool can compare environments, e
 - Compare the durations/versions/gpuMode on or off:
 
 
-- Application information
-```
-Application Information:
+- Application information:
 
-+--------+-----------+-----------------------+---------+-------------+-------------+--------+-----------+------------+-------------+
-|appIndex|appName    |appId                  |sparkUser|startTime    |endTime      |duration|durationStr|sparkVersion|pluginEnabled|
-+--------+-----------+-----------------------+---------+-------------+-------------+--------+-----------+------------+-------------+
-|1       |Spark shell|app-20210329165943-0103|user1    |1617037182848|1617037490515|307667  |5.1 min    |3.0.1       |false        |
-|2       |Spark shell|app-20210329170243-0018|user1    |1617037362324|1617038578035|1215711 |20 min     |3.0.1       |true         |
-+--------+-----------+-----------------------+---------+-------------+-------------+--------+-----------+------------+-------------+
-```
+| appIndex | appName     | appId                    | sparkUser | startTime       | endTime         | duration | durationStr | sparkVersion | pluginEnabled |
+|----------|-------------|--------------------------|-----------|-----------------|-----------------|----------|-------------|--------------|---------------|
+| 1        | Spark shell | app-20210329165943-0103  | user1     | 1617037182848   | 1617037490515   | 307667   | 5.1 min     | 3.0.1        | false         |
+| 2        | Spark shell | app-20210329170243-0018  | user1     | 1617037362324   | 1617038578035   | 1215711  | 20 min      | 3.0.1        | true          |
 
-- Data Source information
+
+- Data Source information:
+
 The details of this output differ between using a Spark Data Source V1 and Data Source V2 reader. 
 The Data Source V2 truncates the schema, so if you see `...`, then
 the full schema is not available.
 
-```
-Data Source Information:
-+--------+-----+-------+---------------------------------------------------------------------------------------------------------------------------+-----------------+---------------------------------------------------------------------------------------------+
-|appIndex|sqlID|format |location                                                                                                                   |pushedFilters    |schema                                                                                       |
-+--------+-----+-------+---------------------------------------------------------------------------------------------------------------------------+-----------------+---------------------------------------------------------------------------------------------+
-|1       |0    |Text   |InMemoryFileIndex[file:/home/user1/workspace/spark-rapids-another/integration_tests/src/test/resources/trucks-comments.csv]|[]               |value:string                                                                                 |
-|1       |1    |csv    |Location: InMemoryFileIndex[file:/home/user1/workspace/spark-rapids-another/integration_tests/src/test/re...               |PushedFilters: []|_c0:string                                                                                   |
-|1       |2    |parquet|Location: InMemoryFileIndex[file:/home/user1/workspace/spark-rapids-another/lotscolumnsout]                                |PushedFilters: []|loan_id:bigint,monthly_reporting_period:string,servicer:string,interest_rate:double,curren...|
-|1       |3    |parquet|Location: InMemoryFileIndex[file:/home/user1/workspace/spark-rapids-another/lotscolumnsout]                                |PushedFilters: []|loan_id:bigint,monthly_reporting_period:string,servicer:string,interest_rate:double,curren...|
-|1       |4    |orc    |Location: InMemoryFileIndex[file:/home/user1/workspace/spark-rapids-another/logscolumsout.orc]                             |PushedFilters: []|loan_id:bigint,monthly_reporting_period:string,servicer:string,interest_rate:double,curren...|
-|1       |5    |orc    |Location: InMemoryFileIndex[file:/home/user1/workspace/spark-rapids-another/logscolumsout.orc]                             |PushedFilters: []|loan_id:bigint,monthly_reporting_period:string,servicer:string,interest_rate:double,curren...|
-|1       |6    |json   |Location: InMemoryFileIndex[file:/home/user1/workspace/spark-rapids-another/lotsofcolumnsout.json]                         |PushedFilters: []|adj_remaining_months_to_maturity:double,asset_recovery_costs:double,credit_enhancement_pro...|
-|1       |7    |json   |Location: InMemoryFileIndex[file:/home/user1/workspace/spark-rapids-another/lotsofcolumnsout.json]                         |PushedFilters: []|adj_remaining_months_to_maturity:double,asset_recovery_costs:double,credit_enhancement_pro...|
-|1       |8    |json   |Location: InMemoryFileIndex[file:/home/user1/workspace/spark-rapids-another/lotsofcolumnsout.json]                         |PushedFilters: []|adj_remaining_months_to_maturity:double,asset_recovery_costs:double,credit_enhancement_pro...|
-|1       |9    |JDBC   |unknown                                                                                                                    |unknown          |                                                                                             |
-+--------+-----+-------+---------------------------------------------------------------------------------------------------------------------------+-----------------+---------------------------------------------------------------------------------------------+
-```
+| appIndex | sqlID | format  | location                                                                                                                   | pushedFilters   | schema                                                                                        |
+|----------|-------|---------|---------------------------------------------------------------------------------------------------------------------------|-----------------|------------------------------------------------------------------------------------------------|
+| 1        | 0     | Text    | InMemoryFileIndex[file:/home/user1/workspace/spark-rapids-another/integration_tests/src/test/resources/trucks-comments.csv] | []              | value:string                                                                                  |
+| 1        | 1     | csv     | Location: InMemoryFileIndex[file:/home/user1/workspace/spark-rapids-another/integration_tests/src/test/re...                | PushedFilters: [] | _c0:string                                                                                    |
+| 1        | 2     | parquet | Location: InMemoryFileIndex[file:/home/user1/workspace/spark-rapids-another/lotscolumnsout]                             | PushedFilters: [] | loan_id:bigint,monthly_reporting_period:string,servicer:string,interest_rate:double,curren... |
+| 1        | 3     | parquet | Location: InMemoryFileIndex[file:/home/user1/workspace/spark-rapids-another/lotscolumnsout]                             | PushedFilters: [] | loan_id:bigint,monthly_reporting_period:string,servicer:string,interest_rate:double,curren... |
+| 1        | 4     | orc     | Location: InMemoryFileIndex[file:/home/user1/workspace/spark-rapids-another/logscolumsout.orc]                          | PushedFilters: [] | loan_id:bigint,monthly_reporting_period:string,servicer:string,interest_rate:double,curren... |
+| 1        | 5     | orc     | Location: InMemoryFileIndex[file:/home/user1/workspace/spark-rapids-another/logscolumsout.orc]                          | PushedFilters: [] | loan_id:bigint,monthly_reporting_period:string,servicer:string,interest_rate:double,curren... |
+| 1        | 6     | json    | Location: InMemoryFileIndex[file:/home/user1/workspace/spark-rapids-another/lotsofcolumnsout.json]                      | PushedFilters: [] | adj_remaining_months_to_maturity:double,asset_recovery_costs:double,credit_enhancement_pro... |
+| 1        | 7     | json    | Location: InMemoryFileIndex[file:/home/user1/workspace/spark-rapids-another/lotsofcolumnsout.json]                      | PushedFilters: [] | adj_remaining_months_to_maturity:double,asset_recovery_costs:double,credit_enhancement_pro... |
+| 1        | 8     | json    | Location: InMemoryFileIndex[file:/home/user1/workspace/spark-rapids-another/lotsofcolumnsout.json]                      | PushedFilters: [] | adj_remaining_months_to_maturity:double,asset_recovery_costs:double,credit_enhancement_pro... |
+| 1        | 9     | JDBC    | unknown                                                                                                                    | unknown         |                                                                                                |
+
 
 - Executor information:
 
-```
-Executor Information:
-+--------+-----------------+------------+-------------+-----------+------------+-------------+--------------+------------------+---------------+-------+-------+
+
 |appIndex|resourceProfileId|numExecutors|executorCores|maxMem     |maxOnHeapMem|maxOffHeapMem|executorMemory|numGpusPerExecutor|executorOffHeap|taskCpu|taskGpu|
-+--------+-----------------+------------+-------------+-----------+------------+-------------+--------------+------------------+---------------+-------+-------+
+|--------|-----------------|------------|-------------|-----------|------------|-------------|--------------|------------------|---------------|-------|-------|
 |1       |0                |1           |4            |11264537395|11264537395 |0            |20480         |1                 |0              |1      |0.0    |
 |1       |1                |2           |2            |3247335014 |3247335014  |0            |6144          |2                 |0              |2      |2.0    |
-+--------+-----------------+------------+-------------+-----------+------------+-------------+-------------+--------------+------------------+---------------+-------+-------+
-```
+
 
 - Matching SQL IDs Across Applications:
 
-```
-Matching SQL IDs Across Applications:
-+-----------------------+-----------------------+
-|app-20210329165943-0103|app-20210329170243-0018|
-+-----------------------+-----------------------+
-|0                      |0                      |
-|1                      |1                      |
-|2                      |2                      |
-|3                      |3                      |
-|4                      |4                      |
-+-----------------------+-----------------------+
-```
+| app-20210329165943-0103 | app-20210329170243-0018 |
+|-------------------------|-------------------------|
+| 0                       | 0                       |
+| 1                       | 1                       |
+| 2                       | 2                       |
+| 3                       | 3                       |
+| 4                       | 4                       |
+
 
 There is one column per application. There is a row per SQL ID. The SQL IDs are matched
 primarily on the structure of the SQL query run, and then on the order in which they were
@@ -217,19 +203,15 @@ CPU and on the GPU will match.
 
 - Matching Stage IDs Across Applications:
 
-```
-Matching Stage IDs Across Applications:
-+-----------------------+-----------------------+
-|app-20210329165943-0103|app-20210329170243-0018|
-+-----------------------+-----------------------+
-|31                     |31                     |
-|32                     |32                     |
-|33                     |33                     |
-|39                     |38                     |
-|40                     |40                     |
-|41                     |41                     |
-+-----------------------+-----------------------+
-```
+| app-20210329165943-0103 | app-20210329170243-0018 |
+|-------------------------|-------------------------|
+| 31                      | 31                      |
+| 32                      | 32                      |
+| 33                      | 33                      |
+| 39                      | 38                      |
+| 40                      | 40                      |
+| 41                      | 41                      |
+
 
 There is one column per application. There is a row per stage ID. If a SQL query matches
 between applications, see Matching SQL IDs Across Applications, then an attempt is made
@@ -243,89 +225,69 @@ is a best effort, and it is not guaranteed to match up all stages in a plan.
 
 Note that not all SQL nodes have a mapping to stage id so some nodes might be missing.
 
-```
-SQL to Stage Information:
-+--------+-----+-----+-------+--------------+--------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-|appIndex|sqlID|jobID|stageId|stageAttemptId|Stage Duration|SQL Nodes(IDs)                                                                                                                                                     |
-+--------+-----+-----+-------+--------------+--------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-|1       |0    |1    |1      |0             |8174          |Exchange(9),WholeStageCodegen (1)(10),Scan(13)                                                                                                                     |
-|1       |0    |1    |2      |0             |8154          |Exchange(16),WholeStageCodegen (3)(17),Scan(20)                                                                                                                    |
-|1       |0    |1    |3      |0             |2148          |Exchange(2),HashAggregate(4),SortMergeJoin(6),WholeStageCodegen (5)(3),Sort(8),WholeStageCodegen (2)(7),Exchange(9),Sort(15),WholeStageCodegen (4)(14),Exchange(16)|
-|1       |0    |1    |4      |0             |126           |HashAggregate(1),WholeStageCodegen (6)(0),Exchange(2)                                                                                                              |
-+--------+-----+-----+-------+--------------+--------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-```
+| appIndex | sqlID | jobID | stageId | stageAttemptId | Stage Duration | SQL Nodes(IDs)                                                                                     |
+|----------|-------|-------|---------|----------------|----------------|---------------------------------------------------------------------------------------------------|
+| 1        | 0     | 1     | 1       | 0              | 8174           | Exchange(9), WholeStageCodegen (1)(10), Scan(13)                                                  |
+| 1        | 0     | 1     | 2       | 0              | 8154           | Exchange(16), WholeStageCodegen (3)(17), Scan(20)                                                 |
+| 1        | 0     | 1     | 3       | 0              | 2148           | Exchange(2), HashAggregate(4), SortMergeJoin(6), WholeStageCodegen (5)(3), Sort(8), WholeStageCodegen (2)(7), Exchange(9), Sort(15), WholeStageCodegen (4)(14), Exchange(16) |
+| 1        | 0     | 1     | 4       | 0              | 126            | HashAggregate(1), WholeStageCodegen (6)(0), Exchange(2)                                           |
+
 
 - Compare Rapids related Spark properties side-by-side:
 
-```
-Compare Rapids Properties which are set explicitly:
-+-------------------------------------------+----------+----------+
-|propertyName                               |appIndex_1|appIndex_2|
-+-------------------------------------------+----------+----------+
-|spark.rapids.memory.pinnedPool.size        |null      |2g        |
-|spark.rapids.sql.castFloatToDecimal.enabled|null      |true      |
-|spark.rapids.sql.concurrentGpuTasks        |null      |2         |
-|spark.rapids.sql.enabled                   |false     |true      |
-|spark.rapids.sql.explain                   |null      |NOT_ON_GPU|
-|spark.rapids.sql.incompatibleOps.enabled   |null      |true      |
-+-------------------------------------------+----------+----------+
-```
+
+| propertyName                                | appIndex_1 | appIndex_2 |
+|--------------------------------------------|------------|------------|
+| spark.rapids.memory.pinnedPool.size         | null       | 2g         |
+| spark.rapids.sql.castFloatToDecimal.enabled | null       | true       |
+| spark.rapids.sql.concurrentGpuTasks         | null       | 2          |
+| spark.rapids.sql.enabled                    | false      | true       |
+| spark.rapids.sql.explain                    | null       | NOT_ON_GPU  |
+| spark.rapids.sql.incompatibleOps.enabled    | null       | true       |
+
+
  
 - List rapids-4-spark jars based on classpath:
 
-```
-Rapids Accelerator jar:
-+--------+------------------------------------------------------------+
-|appIndex|Rapids4Spark jars                                           |
-+--------+------------------------------------------------------------+
-|1       |spark://10.10.10.10:43445/jars/rapids-4-spark_2.12-0.5.0.jar|
-|2       |spark://10.10.10.11:41319/jars/rapids-4-spark_2.12-0.5.0.jar|
-+--------+------------------------------------------------------------+
-```
+| appIndex | Rapids4Spark jars                                            |
+|----------|------------------------------------------------------------|
+| 1        | spark://10.10.10.10:43445/jars/rapids-4-spark_2.12-0.5.0.jar |
+| 2        | spark://10.10.10.11:41319/jars/rapids-4-spark_2.12-0.5.0.jar |
+
 
 - Job, stage and SQL ID information(not in `compare` mode yet):
 
-```
-Job Information:
-+--------+-----+---------+-----+-------------+-------------+
-|appIndex|jobID|stageIds |sqlID|startTime    |endTime      |
-+--------+-----+---------+-----+-------------+-------------+
-|1       |0    |[0]      |null |1622846402778|1622846410240|
-|1       |1    |[1,2,3,4]|0    |1622846431114|1622846441591|
-+--------+-----+---------+-----+-------------+-------------+
-```
+| appIndex | jobID | stageIds | sqlID | startTime    | endTime      |
+|----------|-------|----------|-------|--------------|--------------|
+| 1        | 0     | [0]      | null  | 1622846402778 | 1622846410240 |
+| 1        | 1     | [1,2,3,4]| 0     | 1622846431114 | 1622846441591 |
+
 
 - SQL Plan Metrics for Application for each SQL plan node in each SQL:
 
 These are also called accumulables in Spark.
 Note that not all SQL nodes have a mapping to stage id.
 
-```
-SQL Plan Metrics for Application:
-+--------+-----+------+-----------------------------------------------------------+-------------+-----------------------+-------------+----------+--------+
-|appIndex|sqlID|nodeID|nodeName                                                   |accumulatorId|name                   |max_value    |metricType|stageIds|
-+--------+-----+------+-----------------------------------------------------------+-------------+-----------------------+-------------+----------+--------+
-|1       |0    |1     |GpuColumnarExchange                                        |111          |output rows            |1111111111   |sum       |4,3     |
-|1       |0    |1     |GpuColumnarExchange                                        |112          |output columnar batches|222222       |sum       |4,3     |
-|1       |0    |1     |GpuColumnarExchange                                        |113          |data size              |333333333333 |size      |4,3     |
-|1       |0    |1     |GpuColumnarExchange                                        |114          |shuffle bytes written  |444444444444 |size      |4,3     | 
-|1       |0    |1     |GpuColumnarExchange                                        |115          |shuffle records written|555555       |sum       |4,3     |
-|1       |0    |1     |GpuColumnarExchange                                        |116          |shuffle write time     |666666666666 |nsTiming  |4,3     |
-```
+| appIndex | sqlID | nodeID | nodeName            | accumulatorId | name                  | max_value    | metricType | stageIds |
+|----------|-------|--------|---------------------|---------------|-----------------------|-------------|------------|----------|
+| 1        | 0     | 1      | GpuColumnarExchange | 111           | output rows           | 1111111111  | sum        | 4,3      |
+| 1        | 0     | 1      | GpuColumnarExchange | 112           | output columnar batches | 222222      | sum        | 4,3      |
+| 1        | 0     | 1      | GpuColumnarExchange | 113           | data size             | 333333333333| size       | 4,3      |
+| 1        | 0     | 1      | GpuColumnarExchange | 114           | shuffle bytes written | 444444444444| size       | 4,3      | 
+| 1        | 0     | 1      | GpuColumnarExchange | 115           | shuffle records written| 555555      | sum        | 4,3      |
+| 1        | 0     | 1      | GpuColumnarExchange | 116           | shuffle write time    | 666666666666| nsTiming   | 4,3      |
+
 
 - WholeStageCodeGen to Node Mapping (only for CPU logs):
 
-```
-WholeStageCodeGen Mapping:
-+--------+-----+------+---------------------+-------------------+------------+
-|appIndex|sqlID|nodeID|SQL Node             |Child Node         |Child NodeID|
-+--------+-----+------+---------------------+-------------------+------------+
-|1       |0    |0     |WholeStageCodegen (6)|HashAggregate      |1           |
-|1       |0    |3     |WholeStageCodegen (5)|HashAggregate      |4           |
-|1       |0    |3     |WholeStageCodegen (5)|Project            |5           |
-|1       |0    |3     |WholeStageCodegen (5)|SortMergeJoin      |6           |
-|1       |0    |7     |WholeStageCodegen (2)|Sort               |8           |
-```
+| appIndex | sqlID | nodeID | SQL Node             | Child Node         | Child NodeID |
+|----------|-------|--------|----------------------|--------------------|-------------|
+| 1        | 0     | 0      | WholeStageCodegen (6)| HashAggregate      | 1           |
+| 1        | 0     | 3      | WholeStageCodegen (5)| HashAggregate      | 4           |
+| 1        | 0     | 3      | WholeStageCodegen (5)| Project            | 5           |
+| 1        | 0     | 3      | WholeStageCodegen (5)| SortMergeJoin      | 6           |
+| 1        | 0     | 7      | WholeStageCodegen (2)| Sort               | 8           |
+
 
 
 #### B. Analysis
@@ -339,46 +301,33 @@ to do some analysis such as detecting possible shuffle skew.
 
 - Job + Stage level aggregated task metrics:
 
-```
-Job + Stage level aggregated task metrics:
-+--------+-------+--------+--------+--------------------+------------+------------+------------+------------+-------------------+------------------------------+---------------------------+-------------------+-------------------+---------------------+-------------+----------------------+-----------------------+-------------------------+-----------------------+---------------------------+--------------+--------------------+-------------------------+---------------------+--------------------------+----------------------+----------------------------+---------------------+-------------------+---------------------+----------------+
-|appIndex|ID     |numTasks|Duration|diskBytesSpilled_sum|duration_sum|duration_max|duration_min|duration_avg|executorCPUTime_sum|executorDeserializeCPUTime_sum|executorDeserializeTime_sum|executorRunTime_sum|input_bytesRead_sum|input_recordsRead_sum|jvmGCTime_sum|memoryBytesSpilled_sum|output_bytesWritten_sum|output_recordsWritten_sum|peakExecutionMemory_max|resultSerializationTime_sum|resultSize_max|sr_fetchWaitTime_sum|sr_localBlocksFetched_sum|sr_localBytesRead_sum|sr_remoteBlocksFetched_sum|sr_remoteBytesRead_sum|sr_remoteBytesReadToDisk_sum|sr_totalBytesRead_sum|sw_bytesWritten_sum|sw_recordsWritten_sum|sw_writeTime_sum|
-+--------+-------+--------+--------+--------------------+------------+------------+------------+------------+-------------------+------------------------------+---------------------------+-------------------+-------------------+---------------------+-------------+----------------------+-----------------------+-------------------------+-----------------------+---------------------------+--------------+--------------------+-------------------------+---------------------+--------------------------+----------------------+----------------------------+---------------------+-------------------+---------------------+----------------+
-|1       |job_0  |3333    |222222  |0                   |11111111    |111111      |111         |1111.1      |6666666            |55555                         |55555                      |55555555           |222222222222       |22222222222          |111111       |0                     |0                      |0                        |222222222              |1                          |11111         |11111               |99999                    |22222222222          |2222221                   |222222222222          |0                           |222222222222         |222222222222       |5555555              |444444          |
-```
+| appIndex | ID    | numTasks | Duration | diskBytesSpilled_sum | duration_sum | duration_max | duration_min | duration_avg | executorCPUTime_sum | executorDeserializeCPUTime_sum | executorDeserializeTime_sum | executorRunTime_sum | input_bytesRead_sum | input_recordsRead_sum | jvmGCTime_sum | memoryBytesSpilled_sum | output_bytesWritten_sum | output_recordsWritten_sum | peakExecutionMemory_max | resultSerializationTime_sum | resultSize_max | sr_fetchWaitTime_sum | sr_localBlocksFetched_sum | sr_localBytesRead_sum | sr_remoteBlocksFetched_sum | sr_remoteBytesRead_sum | sr_remoteBytesReadToDisk_sum | sr_totalBytesRead_sum | sw_bytesWritten_sum | sw_recordsWritten_sum | sw_writeTime_sum |
+|----------|-------|----------|----------|--------------------|--------------|--------------|--------------|--------------|---------------------|------------------------------|---------------------------|---------------------|---------------------|---------------------|--------------|-----------------------|-----------------------|-------------------------|-----------------------|---------------------------|--------------|--------------------|-------------------------|---------------------|--------------------------|----------------------|----------------------------|---------------------|---------------------|---------------------|----------------|
+| 1        | job_0 | 3333     | 222222   | 0                  | 11111111     | 111          | 111          | 1111.1       | 6666666             | 55555                        | 55555                     | 55555555            | 222222222222        | 22222222222         | 111111       | 0                     | 0                     | 0                       | 222222222             | 1                         | 11111        | 11111              | 99999                   | 22222222222         | 2222221                  | 222222222222         | 0                          | 222222222222        | 222222222222        | 5555555             | 444444         |
+
 
 - SQL level aggregated task metrics:
 
-```
-SQL level aggregated task metrics:
-+--------+------------------------------+-----+--------------------+--------+--------+---------------+---------------+----------------+--------------------+------------+------------+------------+------------+-------------------+------------------------------+---------------------------+-------------------+-------------------+---------------------+-------------+----------------------+-----------------------+-------------------------+-----------------------+---------------------------+--------------+--------------------+-------------------------+---------------------+--------------------------+----------------------+----------------------------+---------------------+-------------------+---------------------+----------------+
-|appIndex|appID                         |sqlID|description         |numTasks|Duration|executorCPUTime|executorRunTime|executorCPURatio|diskBytesSpilled_sum|duration_sum|duration_max|duration_min|duration_avg|executorCPUTime_sum|executorDeserializeCPUTime_sum|executorDeserializeTime_sum|executorRunTime_sum|input_bytesRead_sum|input_recordsRead_sum|jvmGCTime_sum|memoryBytesSpilled_sum|output_bytesWritten_sum|output_recordsWritten_sum|peakExecutionMemory_max|resultSerializationTime_sum|resultSize_max|sr_fetchWaitTime_sum|sr_localBlocksFetched_sum|sr_localBytesRead_sum|sr_remoteBlocksFetched_sum|sr_remoteBytesRead_sum|sr_remoteBytesReadToDisk_sum|sr_totalBytesRead_sum|sw_bytesWritten_sum|sw_recordsWritten_sum|sw_writeTime_sum|
-+--------+------------------------------+-----+--------------------+--------+--------+---------------+---------------+----------------+--------------------+------------+------------+------------+------------+-------------------+------------------------------+---------------------------+-------------------+-------------------+---------------------+-------------+----------------------+-----------------------+-------------------------+-----------------------+---------------------------+--------------+--------------------+-------------------------+---------------------+--------------------------+----------------------+----------------------------+---------------------+-------------------+---------------------+----------------+
-|1       |application_1111111111111_0001|0    |show at <console>:11|1111    |222222  |6666666        |55555555       |55.55           |0                   |13333333    |111111      |999         |3333.3      |6666666            |55555                         |66666                      |11111111           |111111111111       |11111111111          |111111       |0                     |0                      |0                        |888888888              |8                          |11111         |11111               |99999                    |11111111111          |2222222                   |222222222222          |0                           |222222222222         |444444444444       |5555555              |444444          |
-```
+| appIndex | appID                         | sqlID | description         | numTasks | Duration | executorCPUTime | executorRunTime | executorCPURatio | diskBytesSpilled_sum | duration_sum | duration_max | duration_min | duration_avg | executorCPUTime_sum | executorDeserializeCPUTime_sum | executorDeserializeTime_sum | executorRunTime_sum | input_bytesRead_sum | input_recordsRead_sum | jvmGCTime_sum | memoryBytesSpilled_sum | output_bytesWritten_sum | output_recordsWritten_sum | peakExecutionMemory_max | resultSerializationTime_sum | resultSize_max | sr_fetchWaitTime_sum | sr_localBlocksFetched_sum | sr_localBytesRead_sum | sr_remoteBlocksFetched_sum | sr_remoteBytesRead_sum | sr_remoteBytesReadToDisk_sum | sr_totalBytesRead_sum | sw_bytesWritten_sum | sw_recordsWritten_sum | sw_writeTime_sum |
+|----------|------------------------------|-------|--------------------|----------|----------|----------------|----------------|------------------|----------------------|-------------|-------------|-------------|-------------|--------------------|-------------------------------|---------------------------|-------------------|-------------------|---------------------|--------------|----------------------|-----------------------|-------------------------|-----------------------|---------------------------|--------------|--------------------|-------------------------|---------------------|--------------------------|----------------------|----------------------------|---------------------|---------------------|---------------------|----------------|
+| 1        | application_1111111111111_0001 | 0     | show at <console>:11 | 1111     | 222222   | 6666666        | 55555555       | 55.55            | 0                    | 13333333    | 111111      | 999         | 3333.3      | 6666666            | 55555                         | 66666                     | 11111111          | 111111111111       | 11111111111          | 111111       | 0                    | 0                     | 0                       | 888888888             | 8                         | 
+
 
 - SQL duration, application during, if it contains Dataset or RDD operation, potential problems, executor CPU time percent:
 
-```
-SQL Duration and Executor CPU Time Percent
-+--------+-------------------+-----+------------+--------------------------+------------+---------------------------+-------------------------+
-|appIndex|App ID             |sqlID|SQL Duration|Contains Dataset or RDD Op|App Duration|Potential Problems         |Executor CPU Time Percent|
-+--------+-------------------+-----+------------+--------------------------+------------+---------------------------+-------------------------+
-|1       |local-1626104300434|0    |1260        |false                     |131104      |NESTED COMPLEX TYPE        |92.65                    |
-|1       |local-1626104300434|1    |259         |false                     |131104      |NESTED COMPLEX TYPE        |76.79                    |
-```
+| appIndex | App ID             | sqlID | SQL Duration | Contains Dataset or RDD Op | App Duration | Potential Problems      | Executor CPU Time Percent |
+|----------|-------------------|-------|--------------|--------------------------|--------------|--------------------------|--------------------------|
+| 1        | local-1626104300434| 0     | 1260         | false                    | 131104       | NESTED COMPLEX TYPE     | 92.65                    |
+| 1        | local-1626104300434| 1     | 259          | false                    | 131104       | NESTED COMPLEX TYPE     | 76.79                    |
+
 
 - Shuffle Skew Check: 
 
-```
-Shuffle Skew Check: (When task's Shuffle Read Size > 3 * Avg Stage-level size)
-+--------+-------+--------------+------+-------+---------------+--------------+-----------------+----------------+----------------+----------+----------------------------------------------------------------------------------------------------+
-|appIndex|stageId|stageAttemptId|taskId|attempt|taskDurationSec|avgDurationSec|taskShuffleReadMB|avgShuffleReadMB|taskPeakMemoryMB|successful|reason                                                                                              |
-+--------+-------+--------------+------+-------+---------------+--------------+-----------------+----------------+----------------+----------+----------------------------------------------------------------------------------------------------+
-|1       |2      |0             |2222  |0      |111.11         |7.7           |2222.22          |111.11          |0.01            |false     |ExceptionFailure(ai.rapids.cudf.CudfException,cuDF failure at: /dddd/xxxxxxx/ccccc/bbbbbbbbb/aaaaaaa|
-|1       |2      |0             |2224  |1      |222.22         |8.8           |3333.33          |111.11          |0.01            |false     |ExceptionFailure(ai.rapids.cudf.CudfException,cuDF failure at: /dddd/xxxxxxx/ccccc/bbbbbbbbb/aaaaaaa|
-+--------+-------+--------------+------+-------+---------------+--------------+-----------------+----------------+----------------+----------+----------------------------------------------------------------------------------------------------+
-```
+| appIndex | stageId | stageAttemptId | taskId | attempt | taskDurationSec | avgDurationSec | taskShuffleReadMB | avgShuffleReadMB | taskPeakMemoryMB | successful | reason                                                                                              |
+|----------|---------|----------------|--------|---------|-----------------|----------------|------------------|------------------|------------------|------------|----------------------------------------------------------------------------------------------------|
+| 1        | 2       | 0              | 2222   | 0       | 111.11          | 7.7            | 2222.22          | 111.11           | 0.01             | false      | ExceptionFailure(ai.rapids.cudf.CudfException,cuDF failure at: /dddd/xxxxxxx/ccccc/bbbbbbbbb/aaaaaaa |
+| 1        | 2       | 0              | 2224   | 1       | 222.22          | 8.8            | 3333.33          | 111.11           | 0.01             | false      | ExceptionFailure(ai.rapids.cudf.CudfException,cuDF failure at: /dddd/xxxxxxx/ccccc/bbbbbbbbb/aaaaaaa |
+
 
 #### C. Health Check
 - List failed tasks, stages and jobs
@@ -388,41 +337,29 @@ Shuffle Skew Check: (When task's Shuffle Read Size > 3 * Avg Stage-level size)
 Below are examples.
 - Print failed tasks:
 
-```
-Failed tasks:
-+--------+-------+--------------+------+-------+----------------------------------------------------------------------------------------------------+
-|appIndex|stageId|stageAttemptId|taskId|attempt|failureReason                                                                              |
-+--------+-------+--------------+------+-------+----------------------------------------------------------------------------------------------------+
-|3       |4      |0             |2842  |0      |ExceptionFailure(ai.rapids.cudf.CudfException,cuDF failure at: /home/jenkins/agent/workspace/jenkins|
-|3       |4      |0             |2858  |0      |TaskKilled(another attempt succeeded,List(AccumulableInfo(453,None,Some(22000),None,false,true,None)|
-|3       |4      |0             |2884  |0      |TaskKilled(another attempt succeeded,List(AccumulableInfo(453,None,Some(21148),None,false,true,None)|
-|3       |4      |0             |2908  |0      |TaskKilled(another attempt succeeded,List(AccumulableInfo(453,None,Some(20420),None,false,true,None)|
-|3       |4      |0             |3410  |1      |ExceptionFailure(ai.rapids.cudf.CudfException,cuDF failure at: /home/jenkins/agent/workspace/jenkins|
-|4       |1      |0             |1948  |1      |TaskKilled(another attempt succeeded,List(AccumulableInfo(290,None,Some(1107),None,false,true,None),|
-+--------+-------+--------------+------+-------+----------------------------------------------------------------------------------------------------+
-```
+| appIndex | stageId | stageAttemptId | taskId | attempt | failureReason                                                                              |
+|----------|---------|----------------|--------|---------|----------------------------------------------------------------------------------------------------|
+| 3        | 4       | 0              | 2842   | 0       | ExceptionFailure(ai.rapids.cudf.CudfException,cuDF failure at: /home/jenkins/agent/workspace/jenkins |
+| 3        | 4       | 0              | 2858   | 0       | TaskKilled(another attempt succeeded,List(AccumulableInfo(453,None,Some(22000),None,false,true,None) |
+| 3        | 4       | 0              | 2884   | 0       | TaskKilled(another attempt succeeded,List(AccumulableInfo(453,None,Some(21148),None,false,true,None) |
+| 3        | 4       | 0              | 2908   | 0       | TaskKilled(another attempt succeeded,List(AccumulableInfo(453,None,Some(20420),None,false,true,None) |
+| 3        | 4       | 0              | 3410   | 1       | ExceptionFailure(ai.rapids.cudf.CudfException,cuDF failure at: /home/jenkins/agent/workspace/jenkins |
+| 4        | 1       | 0              | 1948   | 1       | TaskKilled(another attempt succeeded,List(AccumulableInfo(290,None,Some(1107),None,false,true,None) |
+
 
 - Print failed stages:
 
-```
-Failed stages:
-+--------+-------+---------+-------------------------------------+--------+---------------------------------------------------+
-|appIndex|stageId|attemptId|name                                 |numTasks|failureReason                                      |
-+--------+-------+---------+-------------------------------------+--------+---------------------------------------------------+
-|3       |4      |0        |attachTree at Spark300Shims.scala:624|1000    |Job 0 cancelled as part of cancellation of all jobs|
-+--------+-------+---------+-------------------------------------+--------+---------------------------------------------------+
-```
+| appIndex | stageId | attemptId | name                                 | numTasks | failureReason                                      |
+|----------|---------|-----------|--------------------------------------|----------|---------------------------------------------------|
+| 3        | 4       | 0         | attachTree at Spark300Shims.scala:624 | 1000     | Job 0 cancelled as part of cancellation of all jobs |
+
 
 - Print failed jobs:
 
-```
-Failed jobs:
-+--------+-----+---------+------------------------------------------------------------------------+
-|appIndex|jobID|jobResult|failureReason                                                           |
-+--------+-----+---------+------------------------------------------------------------------------+
-|3       |0    |JobFailed|java.lang.Exception: Job 0 cancelled as part of cancellation of all j...|
-+--------+-----+---------+------------------------------------------------------------------------+
-```
+| appIndex | jobID | jobResult | failureReason                                                       |
+|----------|-------|-----------|--------------------------------------------------------------------|
+| 3        | 0     | JobFailed | java.lang.Exception: Job 0 cancelled as part of cancellation of... |
+
 
 - SQL Plan HealthCheck:
 
@@ -435,6 +372,7 @@ Failed jobs:
 |3       |1    |8     |Filter  |Filter $line21.$read$$iw$$iw$$iw$$iw$$iw$$iw$$iw$$iw$$Lambda$4578/0x00000008019f1840@4b63e04c.apply|
 +--------+-----+------+--------+---------------------------------------------------------------------------------------------------+
 ```
+
 
 #### D. Recommended Configuration
 
