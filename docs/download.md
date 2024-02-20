@@ -69,6 +69,7 @@ for your hardware's minimum driver version.
 The RAPIDS Accelerator maintains support for Apache Spark versions available for download from [Apache Spark](https://spark.apache.org/downloads.html)
 
 ### Download RAPIDS Accelerator for Apache Spark v24.02.0
+
 | Processor | Scala Version | Download Jar | Download Signature |
 |-----------|---------------|--------------|--------------------|
 | x86_64    | Scala 2.12    | [RAPIDS Accelerator v24.02.0](https://repo1.maven.org/maven2/com/nvidia/rapids-4-spark_2.12/24.02.0/rapids-4-spark_2.12-24.02.0.jar) | [Signature](https://repo1.maven.org/maven2/com/nvidia/rapids-4-spark_2.12/24.02.0/rapids-4-spark_2.12-24.02.0.jar.asc) |
@@ -76,7 +77,7 @@ The RAPIDS Accelerator maintains support for Apache Spark versions available for
 | arm64     | Scala 2.12    | [RAPIDS Accelerator v24.02.0](https://repo1.maven.org/maven2/com/nvidia/rapids-4-spark_2.12/24.02.0/rapids-4-spark_2.12-24.02.0-cuda11-arm64.jar) | [Signature](https://repo1.maven.org/maven2/com/nvidia/rapids-4-spark_2.12/24.02.0/rapids-4-spark_2.12-24.02.0-cuda11-arm64.jar.asc) |
 | arm64     | Scala 2.13    | [RAPIDS Accelerator v24.02.0](https://repo1.maven.org/maven2/com/nvidia/rapids-4-spark_2.13/24.02.0/rapids-4-spark_2.13-24.02.0-cuda11-arm64.jar) | [Signature](https://repo1.maven.org/maven2/com/nvidia/rapids-4-spark_2.13/24.02.0/rapids-4-spark_2.13-24.02.0-cuda11-arm64.jar.asc) |
 
-| First Header  | Second Header |
+| First Header2  | Second Header2 |
 | ------------- | ------------- |
 | Content Cell  | Content Cell  |
 | Content Cell  | Content Cell  |
