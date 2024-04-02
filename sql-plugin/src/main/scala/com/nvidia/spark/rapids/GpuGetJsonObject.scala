@@ -16,11 +16,8 @@
 
 package com.nvidia.spark.rapids
 
-import scala.util.parsing.combinator.RegexParsers
-
 import ai.rapids.cudf.ColumnVector
 import com.nvidia.spark.rapids.Arm.withResource
-import com.nvidia.spark.rapids.jni.JSONUtils
 
 import org.apache.spark.sql.catalyst.expressions.{ExpectsInputTypes, Expression}
 import org.apache.spark.sql.rapids.test.CpuGetJsonObject
@@ -41,18 +38,6 @@ case class GpuGetJsonObject(
   override def inputTypes: Seq[DataType] = Seq(StringType, StringType)
   override def nullable: Boolean = true
   override def prettyName: String = "get_json_object"
-
-  private var cachedInstructions: 
-      Option[Option[List[PathInstruction]]] = None
-
-  def parseJsonPath(path: GpuScalar): Option[List[PathInstruction]] = {
-    if (path.isValid) {
-      val pathStr = path.getValue.toString()
-      JsonPathParser.parse(pathStr)
-    } else {
-      None
-    }
-  }
 
   override def doColumnar(lhs: GpuColumnVector, rhs: GpuScalar): ColumnVector = {
     val fromGpu = lhs.getBase().getJSONObject(rhs.getBase)
