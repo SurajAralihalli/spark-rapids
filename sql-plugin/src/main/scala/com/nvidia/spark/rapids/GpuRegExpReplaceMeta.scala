@@ -49,7 +49,8 @@ class GpuRegExpReplaceMeta(
     }
 
     expr.regexp match {
-      case Literal(s: UTF8String, DataTypes.StringType) if s != null =>
+      case Literal(s: UTF8String, DataTypes.StringType)
+          if conf.isRegexpTranspilerEnabled && s != null =>
         javaPattern = Some(s.toString())
         try {
           val (pat, repl) =
@@ -77,7 +78,14 @@ class GpuRegExpReplaceMeta(
           case e: RegexUnsupportedException =>
             willNotWorkOnGpu(e.getMessage)
         }
-
+      case Literal(s: UTF8String, DataTypes.StringType) if s != null =>
+        javaPattern = Some(s.toString())
+        cudfPattern = Some(s.toString())
+        replacement.map { r => GpuRegExpUtils.backrefConversion(r) }.foreach {
+          case (hasBackref, convertedRep) =>
+            containsBackref = hasBackref
+            replacement = Some(GpuRegExpUtils.unescapeReplaceString(convertedRep))
+        }
       case _ =>
         willNotWorkOnGpu(s"only non-null literal strings are supported on GPU")
     }

@@ -1067,7 +1067,8 @@ class GpuRLikeMeta(
     override def tagExprForGpu(): Unit = {
       GpuRegExpUtils.tagForRegExpEnabled(this)
       expr.right match {
-        case Literal(str: UTF8String, DataTypes.StringType) if str != null =>
+        case Literal(str: UTF8String, DataTypes.StringType)
+            if conf.isRegexpTranspilerEnabled && str != null =>
           try {
             // verify that we support this regex and can transpile it to cuDF format
             val originalPattern = str.toString
@@ -1083,6 +1084,8 @@ class GpuRLikeMeta(
             case e: RegexUnsupportedException =>
               willNotWorkOnGpu(e.getMessage)
           }
+        case Literal(str: UTF8String, DataTypes.StringType) if str != null =>
+          pattern = Some(str.toString)
         case _ =>
           willNotWorkOnGpu(s"only non-null literal strings are supported on GPU")
       }
@@ -1325,7 +1328,8 @@ class GpuRegExpExtractMeta(
     }
 
     expr.regexp match {
-      case Literal(str: UTF8String, DataTypes.StringType) if str != null =>
+      case Literal(str: UTF8String, DataTypes.StringType)
+          if conf.isRegexpTranspilerEnabled && str != null =>
         try {
           val javaRegexpPattern = str.toString
           // verify that we support this regex and can transpile it to cuDF format
@@ -1339,6 +1343,9 @@ class GpuRegExpExtractMeta(
           case e: RegexUnsupportedException =>
             willNotWorkOnGpu(e.getMessage)
         }
+      case Literal(str: UTF8String, DataTypes.StringType) if str != null =>
+        pattern = Some(str.toString)
+        numGroups = GpuRegExpUtils.countGroups(str.toString)
       case _ =>
         willNotWorkOnGpu(s"only non-null literal strings are supported on GPU")
     }
@@ -1453,7 +1460,8 @@ class GpuRegExpExtractAllMeta(
     }
 
     expr.regexp match {
-      case Literal(str: UTF8String, DataTypes.StringType) if str != null =>
+      case Literal(str: UTF8String, DataTypes.StringType)
+          if conf.isRegexpTranspilerEnabled && str != null =>
         try {
           val javaRegexpPattern = str.toString
           // verify that we support this regex and can transpile it to cuDF format
@@ -1467,6 +1475,9 @@ class GpuRegExpExtractAllMeta(
           case e: RegexUnsupportedException =>
             willNotWorkOnGpu(e.getMessage)
         }
+      case Literal(str: UTF8String, DataTypes.StringType) if str != null =>
+        pattern = Some(str.toString)
+        numGroups = GpuRegExpUtils.countGroups(str.toString)
       case _ =>
         willNotWorkOnGpu(s"only non-null literal strings are supported on GPU")
     }
@@ -1771,7 +1782,10 @@ abstract class StringSplitRegExpMeta[INPUT <: TernaryExpression](expr: INPUT,
         transpiler.transpileToSplittableString(utf8Str.toString) match {
           case Some(simplified) =>
             pattern = simplified
-          case None =>
+          case _ if conf.isRegexpTranspilerEnabled =>
+            pattern = utf8Str.toString
+            isRegExp = true
+          case _ =>
             try {
               val (transpiledAST, _) = transpiler.getTranspiledAST(utf8Str.toString, None, None)
               GpuRegExpUtils.validateRegExpComplexity(this, transpiledAST)
