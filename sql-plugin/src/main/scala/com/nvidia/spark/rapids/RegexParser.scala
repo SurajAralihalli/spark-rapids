@@ -850,7 +850,7 @@ class CudfRegexTranspiler(mode: RegexMode) {
   private def lineTerminatorMatcher(exclude: Set[Char], excludeCRLF: Boolean,
       capture: Boolean): RegexAST = {
     val terminatorChars = new ListBuffer[RegexCharacterClassComponent]()
-    terminatorChars ++= lineTerminatorChars.filter(!exclude.contains(_)).map(RegexChar)
+    terminatorChars ++= Seq('\r').filter(!exclude.contains(_)).map(RegexChar)
 
     if (terminatorChars.size == 0 && excludeCRLF) {
       RegexEmpty()
@@ -863,7 +863,8 @@ class CudfRegexTranspiler(mode: RegexMode) {
         None
       )
     } else {
-      RegexGroup(capture = capture, RegexParser.parse("\r|\u0085|\u2028|\u2029|\r\n"), None)
+      // RegexGroup(capture = capture, RegexParser.parse("\r|\u0085|\u2028|\u2029|\r\n"), None)
+      RegexGroup(capture = capture, RegexParser.parse("\r?"), None)
     }
   }
 
