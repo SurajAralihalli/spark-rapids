@@ -551,12 +551,6 @@ val GPU_COREDUMP_PIPE_PATTERN = conf("spark.rapids.gpu.coreDump.pipePattern")
       .integerConf
       .createWithDefault(2)
 
-  val SHUFFLE_SPILL_THREADS = conf("spark.rapids.sql.shuffle.spillThreads")
-    .doc("Number of threads used to spill shuffle data to disk in the background.")
-    .commonlyUsed()
-    .integerConf
-    .createWithDefault(6)
-
   val GPU_BATCH_SIZE_BYTES = conf("spark.rapids.sql.batchSizeBytes")
     .doc("Set the target number of bytes for a GPU batch. Splits sizes for input data " +
       "is covered by separate configs. The maximum setting is 2 GB to avoid exceeding the " +
@@ -1245,6 +1239,12 @@ val GPU_COREDUMP_PIPE_PATTERN = conf("spark.rapids.gpu.coreDump.pipePattern")
       "semantically equal across Expand projection lists before expanding, to avoid " +
       s"duplicate evaluations. '${ENABLE_TIERED_PROJECT.key}' should also set to true " +
       "to enable this.")
+    .internal()
+    .booleanConf
+    .createWithDefault(true)
+
+  val ENABLE_COALESCE_AFTER_EXPAND = conf("spark.rapids.sql.coalesceAfterExpand.enabled")
+    .doc("When set to false disables the coalesce after GPU Expand. ")
     .internal()
     .booleanConf
     .createWithDefault(true)
@@ -2419,7 +2419,7 @@ val SHUFFLE_COMPRESSION_LZ4_CHUNK_SIZE = conf("spark.rapids.shuffle.compression.
         |On startup use: `--conf [conf key]=[conf value]`. For example:
         |
         |```
-        |${SPARK_HOME}/bin/spark-shell --jars rapids-4-spark_2.12-24.10.0-SNAPSHOT-cuda11.jar \
+        |${SPARK_HOME}/bin/spark-shell --jars rapids-4-spark_2.12-24.12.0-SNAPSHOT-cuda11.jar \
         |--conf spark.plugins=com.nvidia.spark.SQLPlugin \
         |--conf spark.rapids.sql.concurrentGpuTasks=2
         |```
@@ -2852,6 +2852,8 @@ class RapidsConf(conf: Map[String, String]) extends Logging {
   lazy val isRlikeRegexRewriteEnabled: Boolean = get(ENABLE_RLIKE_REGEX_REWRITE)
   
   lazy val isExpandPreprojectEnabled: Boolean = get(ENABLE_EXPAND_PREPROJECT)
+
+  lazy val isCoalesceAfterExpandEnabled: Boolean = get(ENABLE_COALESCE_AFTER_EXPAND)
 
   lazy val multiThreadReadNumThreads: Int = {
     // Use the largest value set among all the options.
