@@ -1574,6 +1574,13 @@ val GPU_COREDUMP_PIPE_PATTERN = conf("spark.rapids.gpu.coreDump.pipePattern")
     .bytesConf(ByteUnit.BYTE)
     .createWithDefault(Integer.MAX_VALUE)
 
+  val ENABLE_REGEXP_TRANSPILER = conf("spark.rapids.sql.regexp.transpiler.enabled")
+    .doc("Enables the transpilation of regular expressions to a format where cuDF can produce " +
+         "the equivalent result for Spark.")
+    .internal()
+    .booleanConf
+    .createWithDefault(true)
+
   // INTERNAL TEST AND DEBUG CONFIGS
 
   val TEST_RETRY_OOM_INJECTION_MODE = conf("spark.rapids.sql.test.injectRetryOOM")
@@ -3158,6 +3165,8 @@ class RapidsConf(conf: Map[String, String]) extends Logging {
   lazy val skipAggPassReductionRatio: Double = get(SKIP_AGG_PASS_REDUCTION_RATIO)
 
   lazy val isRegExpEnabled: Boolean = get(ENABLE_REGEXP)
+
+  lazy val isRegexpTranspilerEnabled: Boolean = get(ENABLE_REGEXP_TRANSPILER)
 
   lazy val maxRegExpStateMemory: Long =  {
     val size = get(REGEXP_MAX_STATE_MEMORY_BYTES)
